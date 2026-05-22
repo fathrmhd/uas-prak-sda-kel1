@@ -100,3 +100,75 @@ void analisisDistribusiNilai(struct Jurusan *j) {
     }
 }
 //akhir bagian person5 (melanie)
+
+//awal bagian person2 (rafid)
+void hitungRataRata(struct NilaiSnbt *nilai) {
+    if (nilai == NULL);
+        return;
+        float total = nilai->pu + nilai->pbm + nilai->ppu + nilai->pk + nilai->lbi + nilai->lbe + nilai->pm;
+        nilai->rataRata = total / 7.0f;
+}
+
+struct Kampus* cariAtauBuatKampus(const char *namaKampus) {
+    struct Kampus *curr = headKampus;
+
+    while (curr != NULL) {
+        if (strcmp(curr->nama, namaKampus) == 0) {
+            return curr; 
+        }
+        curr = curr->next;
+    }
+
+    struct Kampus *newKampus = (struct Kampus*)malloc(sizeof(struct Kampus));
+    strcpy(newKampus->nama, namaKampus);
+    newKampus->headerJurusan = NULL;
+
+    newKampus->next = headKampus;
+    headKampus = newKampus;
+    
+    return newKampus;
+}
+
+struct Jurusan* cariAtauBuatJurusan(struct Kampus *kampusNode, const char *namaJurusan, int kuotaAwal) {
+    if (kampusNode == NULL) return NULL;
+    
+    struct Jurusan *curr = kampusNode->headerJurusan;
+
+    while (curr != NULL) {
+        if (strcmp(curr->nama, namaJurusan) == 0) {
+            return curr; 
+        }
+        curr = curr->next;
+    }
+
+    struct Jurusan *newJurusan = (struct Jurusan*)malloc(sizeof(struct Jurusan));
+    strcpy(newJurusan->nama, namaJurusan);
+    newJurusan->kuota = kuotaAwal;
+    newJurusan->jumlahPeserta = 0;
+    newJurusan->info_statistik.rata_rata_jurusan = 0.0f;
+    newJurusan->info_statistik.median = 0.0f;
+    newJurusan->info_statistik.q1 = 0.0f;
+    newJurusan->info_statistik.batas_lulus = 0.0f;
+
+    newJurusan->next = kampusNode->headerJurusan;
+    kampusNode->headerJurusan = newJurusan;
+    
+    return newJurusan;
+}
+
+void insertPeserta(const char *namaKampus, const char *namaJurusan, int kuota, const char *namaPeserta, struct NilaiSnbt nilaiSubtes) {
+    struct Kampus *kampus = cariAtauBuatKampus(namaKampus);
+    struct Jurusan *jurusan = cariAtauBuatJurusan(kampus, namaJurusan, kuota);
+    
+    hitungRataRata(&nilaiSubtes);
+    
+    if (jurusan->jumlahPeserta < 100) {
+        int index = jurusan->jumlahPeserta;
+        strcpy(jurusan->data_kursi[index].nama, namaPeserta);
+        jurusan->data_kursi[index].nilai = nilaiSubtes;
+        jurusan->jumlahPeserta++;
+    } else {
+        printf("Gagal menginput! Jurusan %s di %s sudah penuh.\n", jurusan->nama, kampus->nama);
+    }
+}
+//akhir bagian person2 (rafid)
