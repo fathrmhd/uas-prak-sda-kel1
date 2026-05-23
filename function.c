@@ -172,3 +172,156 @@ void insertPeserta(const char *namaKampus, const char *namaJurusan, int kuota, c
     }
 }
 //akhir bagian person2 (rafid)
+
+// awal bagian person3 (Dhawy)
+void merge(struct Peserta arr[],
+           int kiri,
+           int tengah,
+           int kanan) {
+
+    int n1 = tengah - kiri + 1;
+    int n2 = kanan - tengah;
+
+    struct Peserta L[100], R[100];
+
+    for (int i = 0; i < n1; i++) {
+        L[i] = arr[kiri + i];
+    }
+
+    for (int j = 0; j < n2; j++) {
+        R[j] = arr[tengah + 1 + j];
+    }
+
+    int i = 0;
+    int j = 0;
+    int k = kiri;
+
+    while (i < n1 && j < n2) {
+
+        if (L[i].nilai.rataRata <=
+            R[j].nilai.rataRata) {
+
+            arr[k] = L[i];
+            i++;
+
+        } else {
+
+            arr[k] = R[j];
+            j++;
+        }
+
+        k++;
+    }
+
+    while (i < n1) {
+
+        arr[k] = L[i];
+
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+
+        arr[k] = R[j];
+
+        j++;
+        k++;
+    }
+}
+
+void mergeSort(struct Peserta arr[],
+               int kiri,
+               int kanan) {
+
+    if (kiri < kanan) {
+
+        int tengah =
+            kiri + (kanan - kiri) / 2;
+
+        mergeSort(arr, kiri, tengah);
+
+        mergeSort(arr, tengah + 1, kanan);
+
+        merge(arr, kiri, tengah, kanan);
+    }
+}
+
+void hitungStatistikJurusan(struct Jurusan *j) {
+
+    if (j->jumlahPeserta == 0) {
+
+        printf("Belum ada peserta.\n");
+        return;
+    }
+
+    mergeSort(j->data_kursi,
+              0,
+              j->jumlahPeserta - 1);
+
+    int jumlah = j->jumlahPeserta;
+
+    float total = 0;
+
+    for (int i = 0; i < jumlah; i++) {
+
+        total +=
+            j->data_kursi[i]
+            .nilai.rataRata;
+    }
+
+    j->info_statistik.rata_rata_jurusan =
+        total / jumlah;
+
+    if (jumlah % 2 == 0) {
+
+        j->info_statistik.median =
+
+        (
+            j->data_kursi[jumlah / 2 - 1]
+            .nilai.rataRata
+
+            +
+
+            j->data_kursi[jumlah / 2]
+            .nilai.rataRata
+        ) / 2;
+
+    } else {
+
+        j->info_statistik.median =
+
+            j->data_kursi[jumlah / 2]
+            .nilai.rataRata;
+    }
+
+    int indexQ1 = jumlah / 4;
+
+    j->info_statistik.q1 =
+
+        j->data_kursi[indexQ1]
+        .nilai.rataRata;
+
+    j->info_statistik.batas_lulus =
+
+        j->info_statistik
+        .rata_rata_jurusan + 5;
+
+    printf("\n=====================================\n");
+    printf("STATISTIK JURUSAN : %s\n", j->nama);
+    printf("=====================================\n");
+
+    printf("Rata-rata : %.2f\n",
+        j->info_statistik.rata_rata_jurusan);
+
+    printf("Median    : %.2f\n",
+        j->info_statistik.median);
+
+    printf("Q1        : %.2f\n",
+        j->info_statistik.q1);
+
+    printf("Batas Lulus : %.2f\n",
+        j->info_statistik.batas_lulus);
+}
+
+//akhir bagian person3 (Dhawy)
