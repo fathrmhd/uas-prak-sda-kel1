@@ -70,4 +70,10 @@ struct Jurusan* cariAtauBuatJurusan(struct Kampus *kampusNode, const char *namaJ
 void hitungRataRata(struct NilaiSnbt *nilai);
 void insertPeserta(const char *namaKampus, const char *namaJurusan, int kuota, const char *namaPeserta, struct NilaiSnbt nilaiSubtes);
 
+// person 4
+int binarySearch(struct Peserta arr[], int kiri, int kanan, float targetNilai);
+struct Kampus* cariKampus(const char *namaKampus);
+struct Jurusan* cariJurusan(struct Kampus *kampusNode, const char *namaJurusan);
+void prediksiHasilUTBK(const char *namaKampus, const char *namaJurusan, float targetNilai);
+
 #endif
