@@ -386,7 +386,7 @@ void inputData() {
         struct NilaiSnbt n;
 
         // Parsing data yang dipisah dengan koma (10 elemen data)
-        int parsed = sscanf(buffer, "%[^,],%[^,],%d,%f,%f,%f,%f,%f,%f,%f",
+        int parsed = sscanf(buffer, "%49[^,],%49[^,],%d,%f,%f,%f,%f,%f,%f,%f",
                             kampus, jurusan, &kuota,
                             &n.pu, &n.pbm, &n.ppu, &n.pk, &n.lbi, &n.lbe, &n.pm);
 
