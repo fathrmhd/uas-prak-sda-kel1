@@ -56,7 +56,6 @@ extern struct LogRiwayat *topStack;
 extern struct NilaiSnbt nilaiTOTerakhir;
 extern int nilaiTO;
 
-void tampilData();
 void distribusiFrekuensi(struct Jurusan *j);
 void analisisDistribusiNilai(struct Jurusan *j);
 
