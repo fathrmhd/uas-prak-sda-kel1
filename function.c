@@ -215,6 +215,15 @@ void prediksiHasilUTBK(const char *namaKampus, const char *namaJurusan, float ta
 
     hitungStatistikJurusan(j);
 
+    int estimasiRank = 1;
+    for (int i = 0; i < j->jumlahPeserta; i++) {
+        if (j->data_kursi[i].nilai.rataRata > targetNilai) {
+            estimasiRank++;
+        }
+    }
+ 
+    int posisiPersisData = binarySearch(j->data_kursi, 0, j->jumlahPeserta - 1, targetNilai);
+
     printf("\n=========================================\n");
     printf("         HASIL PREDIKSI KELULUSAN        \n");
     printf("=========================================\n");
@@ -222,6 +231,13 @@ void prediksiHasilUTBK(const char *namaKampus, const char *namaJurusan, float ta
     printf("Jurusan Tujuan: %s\n", j->nama);
     printf("Nilai Kamu    : %.2f\n", targetNilai);
     printf("Batas Lulus   : %.2f\n", j->info_statistik.batas_lulus);
+
+    if (j->jumlahPeserta > 0) {
+        printf("Estimasi Rank : %d dari %d peserta\n", estimasiRank, j->jumlahPeserta);
+        if (posisiPersisData != -1) {
+            printf("(Nilai ini cocok persis dengan data historis di posisi index %d)\n", posisiPersisData);
+        }
+    }
 
     char status[20];
     if (j->jumlahPeserta == 0) {
