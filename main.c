@@ -109,9 +109,9 @@ int main()
             }
             tampilDaftarKampus();
             printf("\nNama Kampus yang ingin dicek : ");
-            scanf(" %[^\n]", kampus);
+            scanf(" %49[^\n]", kampus);
             printf("Nama Jurusan yang ingin dicek: ");
-            scanf(" %[^\n]", jurusan);
+            scanf(" %49[^\n]", jurusan);
 
             prediksiHasilUTBK(kampus, jurusan, skorDigunakan);
             break;
@@ -121,9 +121,9 @@ int main()
             printf("\n--- Analisis Distribusi Nilai ---\n");
             tampilDaftarKampus();
             printf("Nama Kampus  : ");
-            scanf(" %[^\n]", kampus);
+            scanf(" %49[^\n]", kampus);
             printf("Nama Jurusan : ");
-            scanf(" %[^\n]", jurusan);
+            scanf(" %49[^\n]", jurusan);
 
             struct Kampus *k = cariKampus(kampus);
             if (k == NULL)
