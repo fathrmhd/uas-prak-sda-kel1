@@ -76,46 +76,41 @@ void insertPeserta(const char *namaKampus, const char *namaJurusan, int kuota, s
 
 // awal bagian person3 (Dhawy)
 void merge(struct Peserta arr[], int kiri, int tengah, int kanan) {
-
     int n1 = tengah - kiri + 1;
     int n2 = kanan - tengah;
 
-    struct Peserta L[100], R[100];
+    struct Peserta *L = (struct Peserta*)malloc(n1 * sizeof(struct Peserta));
+    struct Peserta *R = (struct Peserta*)malloc(n2 * sizeof(struct Peserta));
+    if (L == NULL || R == NULL) {
+        printf("[ERROR] Alokasi memori merge gagal.\n");
+        free(L); free(R);
+        return;
+    }
 
     for (int i = 0; i < n1; i++) {
         L[i] = arr[kiri + i];
     }
-
     for (int j = 0; j < n2; j++) {
         R[j] = arr[tengah + 1 + j];
     }
 
-    int i = 0;
-    int j = 0;
-    int k = kiri;
-
+    int i = 0, j = 0, k = kiri;
     while (i < n1 && j < n2) {
         if (L[i].nilai.rataRata >= R[j].nilai.rataRata) {
-            arr[k] = L[i];
-            i++;
-
+           arr[k++] = L[i++];
+        } else {
+            arr[k++] = R[j++];
         }
-        else{
-            arr[k] = R[j];
-            j++;
-        }
-        k++;
     }
     while (i < n1) {
-        arr[k] = L[i];
-        i++;
-        k++;
+        arr[k++] = L[i++];
     }
     while (j < n2) {
-        arr[k] = R[j];
-        j++;
-        k++;
+        arr[k++] = R[j++];
     }
+
+    free(L);
+    free(R);
 }
 
 void mergeSort(struct Peserta arr[], int kiri, int kanan) {
@@ -134,30 +129,27 @@ void hitungStatistikJurusan(struct Jurusan *j) {
     }
 
     mergeSort(j->data_kursi, 0, j->jumlahPeserta - 1);
+    
     float total = 0;
     int n = j->jumlahPeserta;
     for (int i = 0; i < n; i++) {
         total += j->data_kursi[i].nilai.rataRata;
     }
-
     j->info_statistik.rata_rata_jurusan = total / n;
 
     if (n % 2 == 0) {
         j->info_statistik.median = (j->data_kursi[n / 2 - 1].nilai.rataRata + j->data_kursi[n / 2].nilai.rataRata) / 2;
-    } 
-    else {
+    } else {
         j->info_statistik.median = j->data_kursi[n / 2].nilai.rataRata;
     }
 
-    int indexQ1 = n / 4;
-
+    int indexQ1 = (3 * n) / 4;
     j->info_statistik.q1 = j->data_kursi[indexQ1].nilai.rataRata;
 
     int passingGrade;
     if(n < j->kuota){
         passingGrade = n - 1;
-    }
-    else{
+    } else {
         passingGrade = j->kuota - 1;
     }
 
@@ -165,15 +157,12 @@ void hitungStatistikJurusan(struct Jurusan *j) {
 }
 //akhir bagian person3 (Dhawy)
 
-// AWAL BAGIAN PERSON 4 (Mustaqim)
-
+//awal bagian person4 (Mustaqim)
 int binarySearch(struct Peserta arr[], int kiri, int kanan, float targetNilai) {
     if (kanan >= kiri) {
         int tengah = kiri + (kanan - kiri) / 2;
-
         float selisih = arr[tengah].nilai.rataRata - targetNilai;
         if (selisih < 0) selisih = -selisih;
-
         if (selisih < 0.01) {
             return tengah; // Ketemu
         }
@@ -181,7 +170,6 @@ int binarySearch(struct Peserta arr[], int kiri, int kanan, float targetNilai) {
         if (arr[tengah].nilai.rataRata > targetNilai) {
             return binarySearch(arr, kiri, tengah - 1, targetNilai);
         }
-
         return binarySearch(arr, tengah + 1, kanan, targetNilai);
     }
     return -1; // Tidak ketemu
@@ -253,9 +241,9 @@ void prediksiHasilUTBK(const char *namaKampus, const char *namaJurusan, float ta
     pushRiwayat(namaKampus, namaJurusan, targetNilai, status);
 }
 
-// AKHIR BAGIAN PERSON 4 (Mustaqim)
+// akhir bagian person4 (Mustaqim)
 
-// AWAL BAGIAN PERSON 5 (Mellanie)
+// awal bagian person5 (Mellanie)
 void distribusiFrekuensi(struct Jurusan *j) {
     int freq[11] = {0};
 
